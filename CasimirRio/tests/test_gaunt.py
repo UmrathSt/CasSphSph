@@ -1,0 +1,30 @@
+""" Tests of the Gaunt coefficients
+
+"""
+import numpy as np
+from numpy.testing import assert_almost_equal
+import unittest
+from cython_gaunt import gaunt as cythongaunt
+from sympy.physics.wigner import gaunt as sympygaunt
+
+
+sgaunt = lambda l1,l2,lpp,m: sympygaunt(l1,l2,lpp,m,-m,0)
+
+class gaunt(unittest.TestCase):
+
+    def test_gaunts(self):
+        l1 = 240
+        m = np.array([0, 1, 5, 10, 50, 100])
+        for L2 in [1, 151, 379, 1000]:
+            for M in m:
+                gaunts = cythongaunt(l1, L2, M)
+                gmin = gaunts[0]
+                gmax = gaunts[-1]
+                g = [gmin, gmax]
+                lpp = np.array([abs(l1-L2), l1+L2])
+                for i, LPP in enumerate(lpp):
+
+                    assert_almost_equal(g[i], float(sgaunt(l1,L2,LPP,M)))
+
+if __name__ == "__main__":
+    unittest.main()
