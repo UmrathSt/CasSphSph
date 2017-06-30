@@ -13,6 +13,6 @@ To check if the installation worked cd to examples and execute:
 ```bash
 python3 ../worker.py jobfile.config result.dat
 ```
-This should result in the creating of a file "'result.dat"` which 
+This should result in the creation of a file named "result.dat" which 
 contains numerical data according to the quantity specified in
-jobfile.config
+jobfile.config in the section [thermodynamics].
