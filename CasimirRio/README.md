@@ -1,1 +1,5 @@
-Test of Latex formula <p align="center"><img src="https://rawgit.com/UmrathSt/CasSphSph/None/svgs/6ede534e8a548ccd992ec055107b837d.svg?invert_in_darkmode" align=middle width=21.896984999999997pt height=15.885705pt/></p> 
+Package for calculating Casimir Free Energies, Casimir Forces, 
+and Casimir Entropy. To install the package do
+```bash
+pip install -r requirements.txt
+``` 
