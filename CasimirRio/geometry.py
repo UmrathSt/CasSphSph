@@ -11,7 +11,6 @@ from translation import translation
 from scattering import scattering, coated_miescattering
 from stratified_sphere_scattering import StratifiedMieScattering as strat_scat
 import numexpr as ne
-#from scale import balance
 from matrix_balancing import balance
 
 
