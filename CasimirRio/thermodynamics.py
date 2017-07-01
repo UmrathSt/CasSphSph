@@ -23,10 +23,14 @@ class finiteT:# ??? Welche Methoden sind fuer den Benutzer gedacht?
        - geom: a given geometry instance
 
     """
-    def __init__(self, deltaT, nmax, Tmax, geom, analytic_n0=True):
+    def __init__(self, deltaT, nmax, Tmax, geom, analytic_n0=True, nprocs = 0):
         self.__version__ = "SVN Revision "+str("".join(list(filter(str.isdigit, 
                                                                 "$Revision: 952 $"))))
         self.deltaT = deltaT
+        if not type(nprocs) == int and nprocs >= 0:
+            raise ValueError("number of processes for parallelization must be positive \
+                             but given was", nprocs)
+        self.nprocs = nprocs
         self.analytic_n0 = analytic_n0
         if type(geom.mat1) == list or type(geom.mat2) == list:
             self.analytic_n0 = False
@@ -116,8 +120,12 @@ class finiteT:# ??? Welche Methoden sind fuer den Benutzer gedacht?
            schrittweite. 
 
         """
-        f_matsubaras = slicewise_eval(lambda x: self.F_alle(self.deltaT*x),
+        if self.nprocs == 0:
+            f_matsubaras = slicewise_eval(lambda x: self.F_alle(self.deltaT*x),
                                       nmin, self.nmax, schrittweite)
+        else:
+            f_matsubaras = multiproc_slicewise_eval(lambda x: self.F_alle(self.deltaT*x),
+                                    nmin, self.nmax, schrittweite)
         return f_matsubaras
 
     def F_tempcorr(self):
@@ -216,6 +224,9 @@ def slicewise_eval(func, nmin, nmax, stepsize=200):
         result[noffset+nmin:noffset+nmax_sl+1] = func(np.arange(nmin, nmax_sl+1))
         nmin = nmax_sl+1
     return result 
+
+def multiproc_silcewise_eval(func, nmin, nmax):
+    raise NotImplementedError("multiprocessing not yet implemented!")
 
 if __name__ == "__main__":
     from materials import PerfectConductor as pec, Vacuum, Gold, modifiedWater, Altern1Ps
